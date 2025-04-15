@@ -1,168 +1,19 @@
-import { 
-  languages, type Language, type InsertLanguage,
-  products, type Product, type InsertProduct,
-  cartItems, type CartItem, type InsertCartItem
-} from "@shared/schema";
+import { db } from './db';
+import { products, languages, InsertProduct, InsertLanguage } from '@shared/schema';
 
-// Storage interface for all our data operations
-export interface IStorage {
-  // Product methods
-  getAllProducts(): Promise<Product[]>;
-  getProductById(id: number): Promise<Product | undefined>;
-  getProductBySlug(slug: string): Promise<Product | undefined>;
-  getProductsByCategory(category: string): Promise<Product[]>;
-  getFeaturedProducts(): Promise<Product[]>;
-  createProduct(product: InsertProduct): Promise<Product>;
-  
-  // Language methods
-  getAllLanguages(): Promise<Language[]>;
-  getLanguageByCode(code: string): Promise<Language | undefined>;
-  createLanguage(language: InsertLanguage): Promise<Language>;
-  
-  // Cart methods
-  getCartItems(sessionId: string): Promise<CartItem[]>;
-  getCartItemsWithProducts(sessionId: string): Promise<{item: CartItem, product: Product}[]>;
-  addToCart(cartItem: InsertCartItem): Promise<CartItem>;
-  updateCartItemQuantity(id: number, quantity: number): Promise<CartItem | undefined>;
-  removeFromCart(id: number): Promise<boolean>;
-  clearCart(sessionId: string): Promise<boolean>;
-}
-
-// In-memory storage implementation
-export class MemStorage implements IStorage {
-  private products: Map<number, Product>;
-  private languages: Map<number, Language>;
-  private cartItems: Map<number, CartItem>;
-  
-  private productCurrentId: number;
-  private languageCurrentId: number;
-  private cartItemCurrentId: number;
-
-  constructor() {
-    this.products = new Map();
-    this.languages = new Map();
-    this.cartItems = new Map();
+export async function initializeDatabase() {
+  try {
+    console.log('Checking if database needs initialization...');
     
-    this.productCurrentId = 1;
-    this.languageCurrentId = 1;
-    this.cartItemCurrentId = 1;
-    
-    // Initialize with demo data
-    this.initializeData();
-  }
-
-  // Product methods
-  async getAllProducts(): Promise<Product[]> {
-    return Array.from(this.products.values());
-  }
-
-  async getProductById(id: number): Promise<Product | undefined> {
-    return this.products.get(id);
-  }
-
-  async getProductBySlug(slug: string): Promise<Product | undefined> {
-    return Array.from(this.products.values()).find(
-      (product) => product.slug === slug
-    );
-  }
-
-  async getProductsByCategory(category: string): Promise<Product[]> {
-    return Array.from(this.products.values()).filter(
-      (product) => product.category === category
-    );
-  }
-
-  async getFeaturedProducts(): Promise<Product[]> {
-    return Array.from(this.products.values()).filter(
-      (product) => product.isFeatured
-    );
-  }
-
-  async createProduct(insertProduct: InsertProduct): Promise<Product> {
-    const id = this.productCurrentId++;
-    const product: Product = { ...insertProduct, id };
-    this.products.set(id, product);
-    return product;
-  }
-
-  // Language methods
-  async getAllLanguages(): Promise<Language[]> {
-    return Array.from(this.languages.values());
-  }
-
-  async getLanguageByCode(code: string): Promise<Language | undefined> {
-    return Array.from(this.languages.values()).find(
-      (language) => language.code === code
-    );
-  }
-
-  async createLanguage(insertLanguage: InsertLanguage): Promise<Language> {
-    const id = this.languageCurrentId++;
-    const language: Language = { ...insertLanguage, id };
-    this.languages.set(id, language);
-    return language;
-  }
-
-  // Cart methods
-  async getCartItems(sessionId: string): Promise<CartItem[]> {
-    return Array.from(this.cartItems.values()).filter(
-      (item) => item.sessionId === sessionId
-    );
-  }
-
-  async getCartItemsWithProducts(sessionId: string): Promise<{item: CartItem, product: Product}[]> {
-    const items = await this.getCartItems(sessionId);
-    return items.map(item => {
-      const product = this.products.get(item.productId);
-      return {
-        item,
-        product: product!
-      };
-    }).filter(({product}) => product !== undefined);
-  }
-
-  async addToCart(insertCartItem: InsertCartItem): Promise<CartItem> {
-    // Check if the item is already in the cart
-    const existingItem = Array.from(this.cartItems.values()).find(
-      (item) => item.sessionId === insertCartItem.sessionId && item.productId === insertCartItem.productId
-    );
-
-    if (existingItem) {
-      // Update quantity
-      return this.updateCartItemQuantity(existingItem.id, existingItem.quantity + insertCartItem.quantity) as Promise<CartItem>;
+    // Check if products table has data
+    const existingProducts = await db.select().from(products).limit(1);
+    if (existingProducts.length > 0) {
+      console.log('Database already has data, skipping initialization');
+      return;
     }
-
-    // Add new item
-    const id = this.cartItemCurrentId++;
-    const cartItem: CartItem = { ...insertCartItem, id };
-    this.cartItems.set(id, cartItem);
-    return cartItem;
-  }
-
-  async updateCartItemQuantity(id: number, quantity: number): Promise<CartItem | undefined> {
-    const cartItem = this.cartItems.get(id);
-    if (!cartItem) return undefined;
-
-    const updatedItem = { ...cartItem, quantity };
-    this.cartItems.set(id, updatedItem);
-    return updatedItem;
-  }
-
-  async removeFromCart(id: number): Promise<boolean> {
-    return this.cartItems.delete(id);
-  }
-
-  async clearCart(sessionId: string): Promise<boolean> {
-    const itemsToRemove = Array.from(this.cartItems.values())
-      .filter(item => item.sessionId === sessionId)
-      .map(item => item.id);
     
-    itemsToRemove.forEach(id => this.cartItems.delete(id));
-    return true;
-  }
-
-  // Initialize demo data
-  private initializeData() {
+    console.log('Initializing database with sample data...');
+    
     // Initialize languages
     const languagesData: InsertLanguage[] = [
       { code: "hi", name: "Hindi", nativeName: "हिन्दी", description: "Most popular language" },
@@ -178,9 +29,11 @@ export class MemStorage implements IStorage {
       { code: "or", name: "Odia", nativeName: "ଓଡ଼ିଆ", description: "Eastern Indian language" }
     ];
 
-    languagesData.forEach(lang => {
-      this.createLanguage(lang);
-    });
+    // Insert languages
+    console.log('Inserting languages...');
+    for (const language of languagesData) {
+      await db.insert(languages).values(language);
+    }
 
     // Initialize products
     const productsData: InsertProduct[] = [
@@ -354,14 +207,15 @@ export class MemStorage implements IStorage {
       }
     ];
 
-    productsData.forEach(product => {
-      this.createProduct(product);
-    });
+    // Insert products
+    console.log('Inserting products...');
+    for (const product of productsData) {
+      await db.insert(products).values(product);
+    }
+
+    console.log('Database initialization completed successfully');
+  } catch (error) {
+    console.error('Error initializing database:', error);
+    throw error;
   }
 }
-
-// Import the DatabaseStorage
-import { DatabaseStorage } from './database-storage';
-
-// Use DatabaseStorage instead of MemStorage
-export const storage = new DatabaseStorage();
