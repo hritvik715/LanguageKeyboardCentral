@@ -19,6 +19,7 @@ const checkoutButton = document.getElementById('checkout-button');
 const newsletterForm = document.getElementById('newsletter-form');
 const newsletterMessageEl = document.getElementById('newsletter-message');
 
+
 // Fetch data from API
 async function fetchProducts() {
     try {
@@ -77,7 +78,7 @@ async function fetchCart() {
 // Render functions
 function renderFeaturedProducts(featuredProducts) {
     featuredProductsEl.innerHTML = '';
-    
+
     featuredProducts.forEach(product => {
         const productCard = createProductCard(product);
         featuredProductsEl.appendChild(productCard);
@@ -86,7 +87,7 @@ function renderFeaturedProducts(featuredProducts) {
 
 function renderCatalog(productsToRender) {
     productCatalogEl.innerHTML = '';
-    
+
     productsToRender.forEach(product => {
         const productCard = createProductCard(product);
         productCatalogEl.appendChild(productCard);
@@ -95,7 +96,7 @@ function renderCatalog(productsToRender) {
 
 function renderLanguages(languagesToRender) {
     languageGridEl.innerHTML = '';
-    
+
     languagesToRender.forEach(language => {
         const languageCard = createLanguageCard(language);
         languageGridEl.appendChild(languageCard);
@@ -104,21 +105,21 @@ function renderLanguages(languagesToRender) {
 
 function renderCart() {
     cartItemsEl.innerHTML = '';
-    
+
     if (cart.length === 0) {
         cartItemsEl.innerHTML = '<p>Your cart is empty.</p>';
         cartTotalEl.textContent = '₹0.00';
         return;
     }
-    
+
     let total = 0;
-    
+
     cart.forEach((item, index) => {
         const product = products.find(p => p.id === item.productId);
         if (!product) return;
-        
+
         total += (product.price * item.quantity);
-        
+
         const cartItemEl = document.createElement('div');
         cartItemEl.className = 'cart-item';
         cartItemEl.innerHTML = `
@@ -138,22 +139,22 @@ function renderCart() {
         `;
         cartItemsEl.appendChild(cartItemEl);
     });
-    
+
     cartTotalEl.textContent = formatPrice(total);
-    
+
     // Add event listeners for quantity buttons and remove buttons
     document.querySelectorAll('.minus-btn').forEach(btn => {
         btn.addEventListener('click', decreaseQuantity);
     });
-    
+
     document.querySelectorAll('.plus-btn').forEach(btn => {
         btn.addEventListener('click', increaseQuantity);
     });
-    
+
     document.querySelectorAll('.quantity-input').forEach(input => {
         input.addEventListener('change', updateQuantity);
     });
-    
+
     document.querySelectorAll('.cart-item-remove').forEach(btn => {
         btn.addEventListener('click', removeFromCart);
     });
@@ -162,8 +163,8 @@ function renderCart() {
 // Helper functions
 function createProductCard(product) {
     const productCard = document.createElement('div');
-    productCard.className = 'product-card';
-    
+    productCard.className = 'product-card animated-card';
+
     // Create badges HTML
     let badgesHtml = '';
     if (product.isFeatured) {
@@ -172,12 +173,12 @@ function createProductCard(product) {
     if (product.isNewArrival) {
         badgesHtml += '<span class="product-badge badge-new">New</span>';
     }
-    
+
     // Create stars HTML for rating
     const fullStars = Math.floor(product.rating);
     const halfStar = product.rating % 1 >= 0.5;
     const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
-    
+
     let starsHtml = '';
     for (let i = 0; i < fullStars; i++) {
         starsHtml += '<span>★</span>';
@@ -188,7 +189,7 @@ function createProductCard(product) {
     for (let i = 0; i < emptyStars; i++) {
         starsHtml += '<span>☆</span>';
     }
-    
+
     productCard.innerHTML = `
         <div class="product-image">
             <img src="${product.imageUrl}" alt="${product.name}">
@@ -204,26 +205,28 @@ function createProductCard(product) {
             <button class="btn btn-primary add-to-cart" data-product-id="${product.id}">Add to Cart</button>
         </div>
     `;
-    
+
     // Add event listener for add to cart button
     productCard.querySelector('.add-to-cart').addEventListener('click', () => {
         addToCart(product.id);
     });
-    
+
     return productCard;
 }
 
 function createLanguageCard(language) {
     const languageCard = document.createElement('div');
-    languageCard.className = 'language-card';
-    
+    languageCard.className = 'language-card animated-card';
+
     languageCard.innerHTML = `
         <div class="language-icon">${getLanguageChar(language.code)}</div>
-        <h3 class="language-name">${language.name}</h3>
-        <p class="native-name">${language.nativeName}</p>
-        <p class="language-description">${language.description}</p>
+        <div class="language-details">
+            <h3 class="language-name">${language.name}</h3>
+            <p class="native-name">(${language.nativeName})</p>
+            <p class="language-description">${language.description}</p>
+        </div>
     `;
-    
+
     return languageCard;
 }
 
@@ -264,7 +267,7 @@ function updateCartCount() {
 // Cart operations
 async function addToCart(productId) {
     const existingItem = cart.find(item => item.productId === productId);
-    
+
     if (existingItem) {
         // Update quantity of existing item
         await updateCartItemQuantity(existingItem.id, existingItem.quantity + 1);
@@ -281,9 +284,9 @@ async function addToCart(productId) {
                     quantity: 1
                 })
             });
-            
+
             if (!response.ok) throw new Error('Failed to add item to cart');
-            
+
             const newItem = await response.json();
             cart.push(newItem);
             updateCartCount();
@@ -306,7 +309,7 @@ async function addToCart(productId) {
 
 async function updateCartItemQuantity(itemId, quantity) {
     if (quantity < 1) return removeItemFromCart(itemId);
-    
+
     try {
         const response = await fetch(`/api/cart/update/${itemId}`, {
             method: 'PUT',
@@ -315,17 +318,17 @@ async function updateCartItemQuantity(itemId, quantity) {
             },
             body: JSON.stringify({ quantity })
         });
-        
+
         if (!response.ok) throw new Error('Failed to update cart item');
-        
+
         const updatedItem = await response.json();
-        
+
         // Update cart array
         const index = cart.findIndex(item => item.id === itemId);
         if (index !== -1) {
             cart[index] = updatedItem;
         }
-        
+
         updateCartCount();
         renderCart();
     } catch (error) {
@@ -345,9 +348,9 @@ async function removeItemFromCart(itemId) {
         const response = await fetch(`/api/cart/remove/${itemId}`, {
             method: 'DELETE'
         });
-        
+
         if (!response.ok) throw new Error('Failed to remove cart item');
-        
+
         // Remove item from cart array
         cart = cart.filter(item => item.id !== itemId);
         updateCartCount();
@@ -398,23 +401,23 @@ function removeFromCart(e) {
 function filterAndSortProducts() {
     const category = categoryFilterEl.value;
     const sortOption = sortFilterEl.value;
-    
+
     // Filter by category
     let filteredProducts = products;
     if (category) {
         filteredProducts = products.filter(product => product.category === category);
     }
-    
+
     // Sort products
     filteredProducts = sortProducts(filteredProducts, sortOption);
-    
+
     // Render filtered and sorted products
     renderCatalog(filteredProducts);
 }
 
 function sortProducts(productsToSort, sortOption) {
     const sortedProducts = [...productsToSort];
-    
+
     switch (sortOption) {
         case 'price-asc':
             sortedProducts.sort((a, b) => a.price - b.price);
@@ -430,37 +433,82 @@ function sortProducts(productsToSort, sortOption) {
             sortedProducts.sort((a, b) => b.isNewArrival - a.isNewArrival);
             break;
     }
-    
+
     return sortedProducts;
 }
 
 function showMessage(message) {
+    // Remove any existing message first to prevent stacking
+    const existingMessage = document.querySelector('.cart-message');
+    if (existingMessage) {
+        existingMessage.remove();
+    }
+
+    // Get the cart icon element for positioning
+    const cartIcon = document.querySelector('.cart-icon');
+    if (!cartIcon) return;
+
+    // Get the position of the cart icon
+    const cartRect = cartIcon.getBoundingClientRect();
+
+    // Create message element
     const messageEl = document.createElement('div');
-    messageEl.className = 'message';
+    messageEl.className = 'cart-message';
     messageEl.textContent = message;
-    
+
     // Style the message
     messageEl.style.position = 'fixed';
-    messageEl.style.top = '20px';
-    messageEl.style.right = '20px';
+    messageEl.style.top = (cartRect.bottom + 10) + 'px'; // 10px below the cart icon
+    messageEl.style.right = (window.innerWidth - cartRect.right + cartRect.width / 2) + 'px';
     messageEl.style.backgroundColor = 'var(--primary-color)';
     messageEl.style.color = 'var(--white)';
-    messageEl.style.padding = '10px 20px';
-    messageEl.style.borderRadius = 'var(--border-radius)';
-    messageEl.style.boxShadow = 'var(--box-shadow)';
-    messageEl.style.zIndex = '1000';
-    
+    messageEl.style.padding = '8px 12px';
+    messageEl.style.borderRadius = '4px';
+    messageEl.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
+    messageEl.style.zIndex = '999';
+    messageEl.style.transform = 'translateX(50%)'; // Center horizontally relative to right position
+    messageEl.style.fontWeight = '500';
+    messageEl.style.fontSize = '14px';
+    messageEl.style.whiteSpace = 'nowrap';
+
+    // Add a small arrow pointing up to the cart
+    messageEl.style.setProperty('--arrow-size', '8px');
+    messageEl.style.setProperty('--arrow-position', '50%');
+    messageEl.style.setProperty('--arrow-color', 'var(--primary-color)');
+
+    // Add arrow with ::before pseudo-element via inline <style> tag
+    const style = document.createElement('style');
+    style.textContent = `
+        .cart-message::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            right: 50%;
+            transform: translateX(50%);
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 8px solid var(--primary-color);
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Add to DOM
     document.body.appendChild(messageEl);
-    
-    // Remove the message after 3 seconds
+
+    // Remove the message after 2.5 seconds
     setTimeout(() => {
         messageEl.style.opacity = '0';
         messageEl.style.transition = 'opacity 0.5s ease';
-        
+
         setTimeout(() => {
-            document.body.removeChild(messageEl);
+            if (document.body.contains(messageEl)) {
+                document.body.removeChild(messageEl);
+            }
+            if (document.head.contains(style)) {
+                document.head.removeChild(style);
+            }
         }, 500);
-    }, 3000);
+    }, 2500);
 }
 
 // Fallback data for demo
@@ -473,7 +521,7 @@ function useFallbackProducts() {
             description: "Mechanical keyboard with Hindi language layout and RGB lighting. Perfect for daily typing and programming.",
             price: 649900,
             category: "keyboard",
-            imageUrl: "https://images.unsplash.com/photo-1595225476474-87563907a212?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+            imageUrl: "./default_image/kanada_keyboard.png",
             rating: 4.8,
             reviewCount: 124,
             inStock: true,
@@ -488,7 +536,7 @@ function useFallbackProducts() {
             description: "Premium mechanical keyboard with Bengali character support. Features Cherry MX switches for the ultimate typing experience.",
             price: 719900,
             category: "keyboard",
-            imageUrl: "https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+            imageUrl: "./default_image/normal_keyboard.png",
             rating: 4.0,
             reviewCount: 78,
             inStock: true,
@@ -503,7 +551,7 @@ function useFallbackProducts() {
             description: "Keyboard and 24\" display combo with Tamil language support. Perfect for professionals who work in dual languages.",
             price: 1199900,
             category: "display_combo",
-            imageUrl: "https://images.unsplash.com/photo-1542728928-1413d1894ed1?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+            imageUrl: "./default_image/pc.png",
             rating: 5.0,
             reviewCount: 42,
             inStock: true,
@@ -518,7 +566,7 @@ function useFallbackProducts() {
             description: "Special edition keyboard designed specifically for Malayalam typing. Features authentic Malayalam script layout.",
             price: 899900,
             category: "keyboard",
-            imageUrl: "https://images.unsplash.com/photo-1595044426077-d36d9236d54a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+            imageUrl: "./default_image/2in1_with_screen-removebg-preview.png",
             rating: 4.7,
             reviewCount: 56,
             inStock: true,
@@ -527,7 +575,7 @@ function useFallbackProducts() {
             languagesSupported: ["ml", "en"]
         }
     ];
-    
+
     renderCatalog(products);
     renderFeaturedProducts(products.filter(product => product.isFeatured));
 }
@@ -540,7 +588,7 @@ function useFallbackLanguages() {
         { id: 4, code: "te", name: "Telugu", nativeName: "తెలుగు", description: "Complete layout" },
         { id: 5, code: "kn", name: "Kannada", nativeName: "ಕನ್ನಡ", description: "Special edition available" }
     ];
-    
+
     renderLanguages(languages);
 }
 
@@ -551,35 +599,35 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchFeaturedProducts();
     fetchLanguages();
     fetchCart();
-    
+
     // Add event listeners
     categoryFilterEl.addEventListener('change', filterAndSortProducts);
     sortFilterEl.addEventListener('change', filterAndSortProducts);
-    
+
     // Cart modal
     document.querySelector('.cart-icon').addEventListener('click', (e) => {
         e.preventDefault();
         cartModal.style.display = 'block';
         renderCart();
     });
-    
+
     closeButton.addEventListener('click', () => {
         cartModal.style.display = 'none';
     });
-    
+
     window.addEventListener('click', (e) => {
         if (e.target === cartModal) {
             cartModal.style.display = 'none';
         }
     });
-    
+
     checkoutButton.addEventListener('click', () => {
         alert('Thank you for your order! This is a demo website, so no actual payment will be processed.');
         cart = [];
         updateCartCount();
         cartModal.style.display = 'none';
     });
-    
+
     // Newsletter form
     newsletterForm.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -587,5 +635,32 @@ document.addEventListener('DOMContentLoaded', () => {
         newsletterMessageEl.textContent = `Thank you for subscribing with ${email}!`;
         newsletterMessageEl.style.color = 'white';
         newsletterForm.reset();
+    });
+});
+
+
+
+
+
+
+// Scroll to Top functionality
+document.addEventListener('DOMContentLoaded', function () {
+    const scrollToTopButton = document.getElementById('scroll-to-top');
+
+    // Show/hide button based on scroll position
+    window.addEventListener('scroll', function () {
+        if (window.pageYOffset > 300) {
+            scrollToTopButton.classList.add('visible');
+        } else {
+            scrollToTopButton.classList.remove('visible');
+        }
+    });
+
+    // Scroll to top when button is clicked
+    scrollToTopButton.addEventListener('click', function () {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
     });
 });
