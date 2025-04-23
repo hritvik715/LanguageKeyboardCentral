@@ -582,11 +582,11 @@ function useFallbackProducts() {
 
 function useFallbackLanguages() {
     languages = [
-        { id: 1, code: "hi", name: "Hindi", nativeName: "हिन्दी", description: "Most popular language" },
+        { id: 5, code: "kn", name: "Kannada", nativeName: "ಕನ್ನಡ", description: "Special edition available" },
         { id: 2, code: "bn", name: "Bengali", nativeName: "বাংলা", description: "Full character support" },
+        { id: 1, code: "hi", name: "Hindi", nativeName: "हिन्दी", description: "Most popular language" },
         { id: 3, code: "ta", name: "Tamil", nativeName: "தமிழ்", description: "Classical language" },
-        { id: 4, code: "te", name: "Telugu", nativeName: "తెలుగు", description: "Complete layout" },
-        { id: 5, code: "kn", name: "Kannada", nativeName: "ಕನ್ನಡ", description: "Special edition available" }
+        { id: 4, code: "te", name: "Telugu", nativeName: "తెలుగు", description: "Complete layout" }
     ];
 
     renderLanguages(languages);
