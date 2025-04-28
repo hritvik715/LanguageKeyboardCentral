@@ -208,97 +208,35 @@
         </div>
     </section>
 
-    <section class="product-catalog" id="complete-catalog">
+    <section class="product-catalog">
         <div class="container">
             <h2 class="section-title products-title">Our Products</h2>
-            <p class="product-category-description">Each keyboard is available in all 10 supported Indian languages</p>
-
-            <div class="product-categories-grid">
-                <!-- Category 1: Qwerty with Computer -->
-                <div class="product-category-card">
-                    <div class="category-image">
-                        <img src="./default_image/pc.png" alt="Qwerty with Computer">
-                    </div>
-                    <div class="category-content">
-                        <h3 class="category-title">Qwerty with Computer</h3>
-                        <p class="category-description">Complete computing solution with integrated keyboard and system.
-                        </p>
-                        <div class="language-badges">
-                            <span class="mini-badge">10 languages</span>
-                            <div class="language-tooltip">
-                                <span>Hindi, Bengali, Tamil, Telugu, Kannada, Malayalam, Marathi, Punjabi, Gujarati,
-                                    Odia</span>
-                            </div>
-                        </div>
-                        <div class="category-price">From ₹11,999</div>
-                        <button class="btn btn-secondary category-button">View Options</button>
-                    </div>
+            <div class="catalog-filters">
+                <div class="filter-group">
+                    <span class="filter-heading">Category</span>
+                    <select id="category-filter">
+                        <option value="">All Categories</option>
+                        <option value="keyboard">Keyboards</option>
+                        <option value="display_combo">Display Combos</option>
+                        <option value="accessory">Accessories</option>
+                    </select>
                 </div>
-
-                <!-- Category 2: Qwerty Plain -->
-                <div class="product-category-card">
-                    <div class="category-image">
-                        <img src="./default_image/normal_keyboard.png" alt="Qwerty Plain">
-                    </div>
-                    <div class="category-content">
-                        <h3 class="category-title">Qwerty Plain</h3>
-                        <p class="category-description">Standard mechanical keyboard with multilingual support.</p>
-                        <div class="language-badges">
-                            <span class="mini-badge">10 languages</span>
-                            <div class="language-tooltip">
-                                <span>Hindi, Bengali, Tamil, Telugu, Kannada, Malayalam, Marathi, Punjabi, Gujarati,
-                                    Odia</span>
-                            </div>
-                        </div>
-                        <div class="category-price">From ₹6,499</div>
-                        <button class="btn btn-secondary category-button">View Options</button>
-                    </div>
+                <div class="filter-group">
+                    <span class="filter-heading">Sort By</span>
+                    <select id="sort-filter">
+                        <option value="latest">Latest</option>
+                        <option value="price-asc">Price: Low to High</option>
+                        <option value="price-desc">Price: High to Low</option>
+                        <option value="rating">Rating</option>
+                    </select>
                 </div>
-
-                <!-- Category 3: Qwerty 3-in-1 -->
-                <div class="product-category-card">
-                    <div class="category-image">
-                        <img src="./default_image/2in1_with_screen-removebg-preview.png" alt="Qwerty 3-in-1">
-                    </div>
-                    <div class="category-content">
-                        <h3 class="category-title">Qwerty 3-in-1</h3>
-                        <p class="category-description">Multi-device keyboard that works with computer, tablet and
-                            smartphone.</p>
-                        <div class="language-badges">
-                            <span class="mini-badge">10 languages</span>
-                            <div class="language-tooltip">
-                                <span>Hindi, Bengali, Tamil, Telugu, Kannada, Malayalam, Marathi, Punjabi, Gujarati,
-                                    Odia</span>
-                            </div>
-                        </div>
-                        <div class="category-price">From ₹8,999</div>
-                        <button class="btn btn-secondary category-button">View Options</button>
-                    </div>
-                </div>
-
-                <!-- Category 4: Qwerty 3-in-1 with Display -->
-                <div class="product-category-card">
-                    <div class="category-image">
-                        <img src="./default_image/pc.png" alt="Qwerty 3-in-1 with Display">
-                    </div>
-                    <div class="category-content">
-                        <h3 class="category-title">Qwerty 3-in-1 with Display</h3>
-                        <p class="category-description">Multi-device keyboard with integrated display for enhanced
-                            productivity.</p>
-                        <div class="language-badges">
-                            <span class="mini-badge">10 languages</span>
-                            <div class="language-tooltip">
-                                <span>Hindi, Bengali, Tamil, Telugu, Kannada, Malayalam, Marathi, Punjabi, Gujarati,
-                                    Odia</span>
-                            </div>
-                        </div>
-                        <div class="category-price">From ₹14,999</div>
-                        <button class="btn btn-secondary category-button">View Options</button>
-                    </div>
-                </div>
+            </div>
+            <div class="product-grid" id="product-catalog">
+                <!-- Products will be loaded here via JavaScript -->
             </div>
         </div>
     </section>
+
 
 
 
