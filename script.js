@@ -664,3 +664,98 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+
+
+// Hero Product Carousel Functionality
+document.addEventListener('DOMContentLoaded', function () {
+    const slider = document.getElementById('heroSlider');
+    const pagination = document.getElementById('heroPagination');
+    const prevBtn = document.querySelector('.hero-prev');
+    const nextBtn = document.querySelector('.hero-next');
+
+    if (!slider || !pagination) return;
+
+    const slides = slider.querySelectorAll('.hero-slide');
+    let currentIndex = 0;
+    let autoSlideInterval;
+
+    // Create pagination dots
+    slides.forEach((_, index) => {
+        const dot = document.createElement('div');
+        dot.classList.add('hero-dot');
+        if (index === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => goToSlide(index));
+        pagination.appendChild(dot);
+    });
+
+    // Navigation functions
+    function updateSliderPosition() {
+        slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+        // Update pagination
+        document.querySelectorAll('.hero-dot').forEach((dot, index) => {
+            dot.classList.toggle('active', index === currentIndex);
+        });
+    }
+
+    function goToSlide(index) {
+        currentIndex = index;
+        updateSliderPosition();
+        resetAutoSlide();
+    }
+
+    function goToNextSlide() {
+        currentIndex = (currentIndex + 1) % slides.length;
+        updateSliderPosition();
+        resetAutoSlide();
+    }
+
+    function goToPrevSlide() {
+        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+        updateSliderPosition();
+        resetAutoSlide();
+    }
+
+    // Set up auto-sliding
+    function startAutoSlide() {
+        autoSlideInterval = setInterval(goToNextSlide, 5000); // Change slide every 5 seconds
+    }
+
+    function resetAutoSlide() {
+        clearInterval(autoSlideInterval);
+        startAutoSlide();
+    }
+
+    // Add event listeners to buttons
+    if (prevBtn) prevBtn.addEventListener('click', goToPrevSlide);
+    if (nextBtn) nextBtn.addEventListener('click', goToNextSlide);
+
+    // Start the auto-sliding
+    startAutoSlide();
+
+    // Pause auto-sliding when hovering
+    slider.addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
+    slider.addEventListener('mouseleave', startAutoSlide);
+
+    // Handle swipe gestures for mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    slider.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+    });
+
+    slider.addEventListener('touchend', e => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    });
+
+    function handleSwipe() {
+        const swipeThreshold = 50;
+        if (touchEndX < touchStartX - swipeThreshold) {
+            goToNextSlide(); // Swipe left
+        } else if (touchEndX > touchStartX + swipeThreshold) {
+            goToPrevSlide(); // Swipe right
+        }
+    }
+});
