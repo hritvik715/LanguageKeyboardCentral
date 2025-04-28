@@ -136,6 +136,38 @@
                         <div class="hero-badge">Premium</div>
                     </div>
                 </div>
+
+
+                <!-- Slide 4 -->
+                <div class="hero-slide">
+                    <div class="hero-content">
+                        <h1 class="hero-title">Tamil-English Combo</h1>
+                        <p class="hero-description">Keyboard and 24" display combo with Tamil language support. Perfect
+                            for professionals who work in dual languages.</p>
+                        <div class="hero-price">₹11,999</div>
+                        <div class="hero-buttons">
+                            <button class="hero-btn hero-btn-primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <circle cx="9" cy="21" r="1"></circle>
+                                    <circle cx="20" cy="21" r="1"></circle>
+                                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                                </svg>
+                                Add to Cart
+                            </button>
+                            <button class="hero-btn hero-btn-secondary">Learn More</button>
+                        </div>
+                    </div>
+                    <div class="hero-image-container">
+                        <img src="./default_image/pc.png" alt="Tamil-English Combo" class="hero-image">
+                        <div class="hero-badge">Premium</div>
+                    </div>
+                </div>
+
+
+
+
             </div>
 
             <!-- Navigation -->
@@ -175,18 +207,37 @@
             </div>
         </div>
     </section>
-
-    <section class="product-catalog">
+    <section class="product-catalog" id="complete-catalog">
         <div class="container">
             <h2 class="section-title products-title">Our Products</h2>
+            <p class="products-description">Browse our complete collection of 40 keyboard variants supporting all major
+                Indian languages</p>
+
             <div class="catalog-filters">
                 <div class="filter-group">
-                    <span class="filter-heading">Category</span>
-                    <select id="category-filter">
-                        <option value="">All Categories</option>
-                        <option value="keyboard">Keyboards</option>
-                        <option value="display_combo">Display Combos</option>
-                        <option value="accessory">Accessories</option>
+                    <span class="filter-heading">Product Type</span>
+                    <select id="product-type-filter">
+                        <option value="">All Types</option>
+                        <option value="qwerty-computer">Qwerty with Computer</option>
+                        <option value="qwerty-plain">Qwerty Plain</option>
+                        <option value="qwerty-3in1">Qwerty 3-in-1</option>
+                        <option value="qwerty-3in1-display">Qwerty 3-in-1 with Display</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <span class="filter-heading">Language</span>
+                    <select id="language-filter">
+                        <option value="">All Languages</option>
+                        <option value="hindi">Hindi</option>
+                        <option value="bengali">Bengali</option>
+                        <option value="tamil">Tamil</option>
+                        <option value="telugu">Telugu</option>
+                        <option value="kannada">Kannada</option>
+                        <option value="malayalam">Malayalam</option>
+                        <option value="marathi">Marathi</option>
+                        <option value="punjabi">Punjabi</option>
+                        <option value="gujarati">Gujarati</option>
+                        <option value="odia">Odia</option>
                     </select>
                 </div>
                 <div class="filter-group">
@@ -199,12 +250,16 @@
                     </select>
                 </div>
             </div>
-            <div class="product-grid" id="product-catalog">
-                <!-- Products will be loaded here via JavaScript -->
+
+            <div class="product-counts">
+                <span id="product-count">Showing all 40 products</span>
+            </div>
+
+            <div class="complete-product-grid" id="complete-product-catalog">
+                <!-- Products will be dynamically loaded here via JavaScript -->
             </div>
         </div>
     </section>
-
 
 
 

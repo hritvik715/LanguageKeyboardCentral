@@ -667,6 +667,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 // Hero Product Carousel Functionality
+// Hero Product Carousel Functionality
 document.addEventListener('DOMContentLoaded', function () {
     const slider = document.getElementById('heroSlider');
     const pagination = document.getElementById('heroPagination');
@@ -692,7 +693,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function updateSliderPosition() {
         slider.style.transform = `translateX(-${currentIndex * 100}%)`;
 
-        // Update pagination
+        // Update pagination dots
         document.querySelectorAll('.hero-dot').forEach((dot, index) => {
             dot.classList.toggle('active', index === currentIndex);
         });
@@ -718,7 +719,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Set up auto-sliding
     function startAutoSlide() {
-        autoSlideInterval = setInterval(goToNextSlide, 5000); // Change slide every 5 seconds
+        autoSlideInterval = setInterval(goToNextSlide, 2 * 1000); // Change slide every 5 seconds
     }
 
     function resetAutoSlide() {
@@ -733,11 +734,11 @@ document.addEventListener('DOMContentLoaded', function () {
     // Start the auto-sliding
     startAutoSlide();
 
-    // Pause auto-sliding when hovering
+    // Pause auto-sliding when hovering over the slider
     slider.addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
     slider.addEventListener('mouseleave', startAutoSlide);
 
-    // Handle swipe gestures for mobile
+    // Handle touch swipe gestures for mobile
     let touchStartX = 0;
     let touchEndX = 0;
 
@@ -757,5 +758,185 @@ document.addEventListener('DOMContentLoaded', function () {
         } else if (touchEndX > touchStartX + swipeThreshold) {
             goToPrevSlide(); // Swipe right
         }
+    }
+});
+
+
+// Complete Product Catalog
+const productTypes = [
+    { id: 'qwerty-computer', name: 'Qwerty with Computer', basePrice: 11999 },
+    { id: 'qwerty-plain', name: 'Qwerty Plain', basePrice: 6499 },
+    { id: 'qwerty-3in1', name: 'Qwerty 3-in-1', basePrice: 8999 },
+    { id: 'qwerty-3in1-display', name: 'Qwerty 3-in-1 with Display', basePrice: 14999 }
+];
+
+const supportedLanguages = [
+    { id: 'hindi', name: 'Hindi', nativeName: 'हिन्दी', multiplier: 1.0 },
+    { id: 'bengali', name: 'Bengali', nativeName: 'বাংলা', multiplier: 1.05 },
+    { id: 'tamil', name: 'Tamil', nativeName: 'தமிழ்', multiplier: 1.1 },
+    { id: 'telugu', name: 'Telugu', nativeName: 'తెలుగు', multiplier: 1.1 },
+    { id: 'kannada', name: 'Kannada', nativeName: 'ಕನ್ನಡ', multiplier: 1.05 },
+    { id: 'malayalam', name: 'Malayalam', nativeName: 'മലയാളം', multiplier: 1.15 },
+    { id: 'marathi', name: 'Marathi', nativeName: 'मराठी', multiplier: 1.0 },
+    { id: 'punjabi', name: 'Punjabi', nativeName: 'ਪੰਜਾਬੀ', multiplier: 1.1 },
+    { id: 'gujarati', name: 'Gujarati', nativeName: 'ગુજરાતી', multiplier: 1.05 },
+    { id: 'odia', name: 'Odia', nativeName: 'ଓଡ଼ିଆ', multiplier: 1.15 }
+];
+
+// Generate all product variants
+function generateAllProducts() {
+    const allProducts = [];
+    let id = 1;
+
+    productTypes.forEach(type => {
+        supportedLanguages.forEach(lang => {
+            // Adjust price based on language complexity and product type
+            const price = Math.round(type.basePrice * lang.multiplier);
+
+            // Choose appropriate image based on product type
+            let imageUrl = './default_image/kanada_keyboard.png';
+            if (type.id === 'qwerty-computer' || type.id === 'qwerty-3in1-display') {
+                imageUrl = './default_image/pc.png';
+            } else if (type.id === 'qwerty-3in1') {
+                imageUrl = './default_image/2in1_with_screen-removebg-preview.png';
+            } else {
+                imageUrl = './default_image/normal_keyboard.png';
+            }
+
+            allProducts.push({
+                id: id++,
+                name: `${lang.name} ${type.name}`,
+                slug: `${lang.id}-${type.id}`,
+                description: `Professional keyboard with ${lang.name} (${lang.nativeName}) language support. ${type.id.includes('computer') ? 'Includes integrated computer system.' : type.id.includes('display') ? 'Features built-in display.' : type.id.includes('3in1') ? 'Works with computer, tablet, and smartphone.' : 'Standalone keyboard for any device.'}`,
+                price: price * 100, // Store price in paisa
+                category: type.id.includes('computer') || type.id.includes('display') ? "display_combo" : "keyboard",
+                imageUrl: imageUrl,
+                rating: 4.5 + (Math.random() * 0.5),
+                reviewCount: 10 + Math.floor(Math.random() * 90),
+                inStock: Math.random() > 0.1, // 90% chance of being in stock
+                isFeatured: Math.random() > 0.8, // 20% chance of being featured
+                isNewArrival: Math.random() > 0.7, // 30% chance of being new arrival
+                languageId: lang.id,
+                languageName: lang.name,
+                nativeName: lang.nativeName,
+                productTypeId: type.id,
+                productTypeName: type.name
+            });
+        });
+    });
+
+    return allProducts;
+}
+
+// Filter and display products
+function displayFilteredProducts() {
+    const allProducts = generateAllProducts();
+    const productTypeFilter = document.getElementById('product-type-filter').value;
+    const languageFilter = document.getElementById('language-filter').value;
+    const sortOption = document.getElementById('sort-filter').value;
+
+    let filteredProducts = allProducts;
+
+    // Apply product type filter
+    if (productTypeFilter) {
+        filteredProducts = filteredProducts.filter(product => product.productTypeId === productTypeFilter);
+    }
+
+    // Apply language filter
+    if (languageFilter) {
+        filteredProducts = filteredProducts.filter(product => product.languageId === languageFilter);
+    }
+
+    // Apply sorting
+    filteredProducts = sortProducts(filteredProducts, sortOption);
+
+    // Update product count
+    const countElement = document.getElementById('product-count');
+    countElement.textContent = `Showing ${filteredProducts.length} of ${allProducts.length} products`;
+
+    // Display filtered products
+    const productCatalog = document.getElementById('complete-product-catalog');
+    productCatalog.innerHTML = '';
+
+    filteredProducts.forEach(product => {
+        const productCard = createCompleteProductCard(product);
+        productCatalog.appendChild(productCard);
+    });
+}
+
+// Create product card for the complete catalog
+function createCompleteProductCard(product) {
+    const productCard = document.createElement('div');
+    productCard.className = 'product-card animated-card';
+
+    // Create badges HTML
+    let badgesHtml = '';
+    if (product.isFeatured) {
+        badgesHtml += '<span class="product-badge badge-featured">Featured</span>';
+    }
+    if (product.isNewArrival) {
+        badgesHtml += '<span class="product-badge badge-new">New</span>';
+    }
+
+    // Create stars HTML for rating
+    const fullStars = Math.floor(product.rating);
+    const halfStar = product.rating % 1 >= 0.5;
+    const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+
+    let starsHtml = '';
+    for (let i = 0; i < fullStars; i++) {
+        starsHtml += '<span>★</span>';
+    }
+    if (halfStar) {
+        starsHtml += '<span>⯨</span>';
+    }
+    for (let i = 0; i < emptyStars; i++) {
+        starsHtml += '<span>☆</span>';
+    }
+
+    productCard.innerHTML = `
+      <div class="product-language-badge">${product.languageName} <small>${product.nativeName}</small></div>
+      <div class="product-type-badge">${product.productTypeName}</div>
+      <div class="product-image">
+        <img src="${product.imageUrl}" alt="${product.name}">
+      </div>
+      <div class="product-details">
+        <h3 class="product-title">${product.name}</h3>
+        <p class="product-price">${formatPrice(product.price)}</p>
+        <div class="product-rating">
+          <div class="stars">${starsHtml}</div>
+          <span>(${product.reviewCount})</span>
+        </div>
+        <div class="product-badges">${badgesHtml}</div>
+        <button class="btn btn-primary add-to-cart" data-product-id="${product.id}" ${!product.inStock ? 'disabled' : ''}>
+          ${product.inStock ? 'Add to Cart' : 'Out of Stock'}
+        </button>
+      </div>
+    `;
+
+    // Add event listener for add to cart button
+    productCard.querySelector('.add-to-cart').addEventListener('click', () => {
+        if (product.inStock) {
+            addToCart(product.id);
+        }
+    });
+
+    return productCard;
+}
+
+// Initialize the complete product catalog
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize filter events
+    const productTypeFilter = document.getElementById('product-type-filter');
+    const languageFilter = document.getElementById('language-filter');
+    const sortFilter = document.getElementById('sort-filter');
+
+    if (productTypeFilter && languageFilter && sortFilter) {
+        productTypeFilter.addEventListener('change', displayFilteredProducts);
+        languageFilter.addEventListener('change', displayFilteredProducts);
+        sortFilter.addEventListener('change', displayFilteredProducts);
+
+        // Initial display
+        displayFilteredProducts();
     }
 });
