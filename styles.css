@@ -3968,64 +3968,293 @@ img {
 }
 
 
-/* Complete Product Catalog Styling */
-.products-description {
-  text-align: center;
-  margin-bottom: 30px;
-  color: #666;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
+
+/* Darker Hover Effects for Card Backgrounds */
+
+/* Product Card Hover Effect - Darker Version */
+.product-card .product-details {
+  background-color: #ffffff;
+  transition: background-color 0.3s ease;
 }
 
-.product-counts {
-  margin: 20px 0;
-  font-size: 0.9rem;
-  color: #666;
+.product-card:hover .product-details {
+  background-color: #e6e0ff; /* Darker purple shade when hovering */
+  box-shadow: inset 0 0 0 1px rgba(140, 98, 247, 0.2);
 }
 
-.complete-product-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 25px;
-}
-
-.product-card {
-  position: relative;
-  border-radius: 12px;
-  overflow: hidden;
-  background-color: #fff;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+/* Language Card Hover Effect - Darker Version */
+.language-card {
+  background-color: #ffffff;
   transition: all 0.3s ease;
 }
 
-.product-card:hover {
+.language-card:hover {
+  background-color: #e0d8ff; /* Darker purple shade when hovering */
   transform: translateY(-10px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 30px rgba(140, 98, 247, 0.3);
 }
 
-.product-language-badge {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background: linear-gradient(90deg, #8c62f7, #6a4bc3);
-  color: white;
-  padding: 5px 10px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  z-index: 2;
+/* Blog Card Hover Effect - Darker Version */
+.blog-card .blog-content {
+  background-color: #ffffff;
+  transition: background-color 0.3s ease;
 }
 
-.product-type-badge {
+.blog-card:hover .blog-content {
+  background-color: #e0d8ff; /* Darker purple shade when hovering */
+}
+
+/* Testimonial Card Hover Effect - Darker Version */
+.testimonial-content {
+  transition: background-color 0.5s ease;
+}
+
+.testimonial-content:hover {
+  background-color: #e0d8ff; /* Darker purple for testimonial cards */
+}
+
+/* Custom Event Card Hover Effect - Darker Version */
+.event-summary {
+  transition: background-color 0.4s ease, bottom 0.4s ease, opacity 0.4s ease;
+}
+
+.col a:hover .event-summary {
+  background-color: rgba(106, 75, 195, 0.95); /* Darker and more vibrant purple */
+}
+
+/* Add darker text colors on hover */
+.product-card:hover .product-title,
+.language-card:hover .language-name,
+.blog-card:hover h3 {
+  color: #6a4bc3; /* Darker purple for text */
+}
+
+/* Enhanced gradient effect for product and language cards */
+.product-card:hover::before,
+.language-card:hover::before {
+  content: "";
   position: absolute;
-  top: 10px;
-  right: 10px;
-  background: rgba(255, 255, 255, 0.9);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at top right, rgba(106, 75, 195, 0.12), transparent 70%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Add a subtle border effect for more emphasis */
+.product-card:hover,
+.language-card:hover,
+.blog-card:hover {
+  border-color: rgba(106, 75, 195, 0.3);
+}
+
+
+
+
+
+
+
+/* Fix for inconsistent blog card hover backgrounds */
+.blog-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  background-color: #ffffff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.blog-image-container {
+  flex-shrink: 0;
+}
+
+.blog-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #ffffff;
+  transition: background-color 0.3s ease;
+}
+
+/* Ensure the entire bottom content area changes color */
+.blog-card:hover .blog-content {
+  background-color: #e0d8ff;
+  height: 100%;
+}
+
+/* Fix for white space below content */
+.blog-card::after {
+  content: none;
+}
+
+/* Ensure the blog cards have consistent heights */
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.blog-grid .blog-card {
+  height: 100%;
+}
+
+/* Fix for the bottom card that doesn't fully change color */
+.blog-card .blog-read-more {
+  margin-top: auto;
+}
+
+
+
+
+
+
+
+/* Product Categories Section */
+.product-category-description {
+  text-align: center;
+  margin-bottom: 40px;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.product-categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  margin-bottom: 50px;
+}
+
+.product-category-card {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  height: 100%;
+  cursor: pointer;
+}
+
+.product-category-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 35px rgba(106, 75, 195, 0.15);
+}
+
+.product-category-card:hover .category-content {
+  background-color: #e0d8ff;
+}
+
+.category-image {
+  height: 220px;
+  overflow: hidden;
+  background-color: #f7f7f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.category-image img {
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
+  transition: transform 0.5s ease;
+}
+
+.product-category-card:hover .category-image img {
+  transform: scale(1.05);
+}
+
+.category-content {
+  padding: 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.3s ease;
+}
+
+.category-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 10px;
   color: #333;
-  padding: 5px 10px;
-  border-radius: 20px;
+}
+
+.category-description {
+  font-size: 0.95rem;
+  color: #666;
+  margin-bottom: 15px;
+  flex-grow: 1;
+}
+
+.language-badges {
+  display: flex;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.mini-badge {
+  background-color: #8c62f7;
+  color: white;
   font-size: 0.8rem;
+  padding: 3px 10px;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+.language-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  width: 280px;
+  z-index: 10;
+  transform: translateY(10px);
+}
+
+.language-badges:hover .language-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.category-price {
+  font-size: 1.2rem;
   font-weight: 600;
-  z-index: 2;
+  color: #8c62f7;
+  margin-bottom: 15px;
+}
+
+.category-button {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  text-align: center;
+  background-color: transparent;
+  color: #8c62f7;
+  border: 2px solid #8c62f7;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.category-button:hover {
+  background-color: #8c62f7;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .product-categories-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
 }

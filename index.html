@@ -207,56 +207,95 @@
             </div>
         </div>
     </section>
+
     <section class="product-catalog" id="complete-catalog">
         <div class="container">
             <h2 class="section-title products-title">Our Products</h2>
-            <p class="products-description">Browse our complete collection of 40 keyboard variants supporting all major
-                Indian languages</p>
+            <p class="product-category-description">Each keyboard is available in all 10 supported Indian languages</p>
 
-            <div class="catalog-filters">
-                <div class="filter-group">
-                    <span class="filter-heading">Product Type</span>
-                    <select id="product-type-filter">
-                        <option value="">All Types</option>
-                        <option value="qwerty-computer">Qwerty with Computer</option>
-                        <option value="qwerty-plain">Qwerty Plain</option>
-                        <option value="qwerty-3in1">Qwerty 3-in-1</option>
-                        <option value="qwerty-3in1-display">Qwerty 3-in-1 with Display</option>
-                    </select>
+            <div class="product-categories-grid">
+                <!-- Category 1: Qwerty with Computer -->
+                <div class="product-category-card">
+                    <div class="category-image">
+                        <img src="./default_image/pc.png" alt="Qwerty with Computer">
+                    </div>
+                    <div class="category-content">
+                        <h3 class="category-title">Qwerty with Computer</h3>
+                        <p class="category-description">Complete computing solution with integrated keyboard and system.
+                        </p>
+                        <div class="language-badges">
+                            <span class="mini-badge">10 languages</span>
+                            <div class="language-tooltip">
+                                <span>Hindi, Bengali, Tamil, Telugu, Kannada, Malayalam, Marathi, Punjabi, Gujarati,
+                                    Odia</span>
+                            </div>
+                        </div>
+                        <div class="category-price">From ₹11,999</div>
+                        <button class="btn btn-secondary category-button">View Options</button>
+                    </div>
                 </div>
-                <div class="filter-group">
-                    <span class="filter-heading">Language</span>
-                    <select id="language-filter">
-                        <option value="">All Languages</option>
-                        <option value="hindi">Hindi</option>
-                        <option value="bengali">Bengali</option>
-                        <option value="tamil">Tamil</option>
-                        <option value="telugu">Telugu</option>
-                        <option value="kannada">Kannada</option>
-                        <option value="malayalam">Malayalam</option>
-                        <option value="marathi">Marathi</option>
-                        <option value="punjabi">Punjabi</option>
-                        <option value="gujarati">Gujarati</option>
-                        <option value="odia">Odia</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <span class="filter-heading">Sort By</span>
-                    <select id="sort-filter">
-                        <option value="latest">Latest</option>
-                        <option value="price-asc">Price: Low to High</option>
-                        <option value="price-desc">Price: High to Low</option>
-                        <option value="rating">Rating</option>
-                    </select>
-                </div>
-            </div>
 
-            <div class="product-counts">
-                <span id="product-count">Showing all 40 products</span>
-            </div>
+                <!-- Category 2: Qwerty Plain -->
+                <div class="product-category-card">
+                    <div class="category-image">
+                        <img src="./default_image/normal_keyboard.png" alt="Qwerty Plain">
+                    </div>
+                    <div class="category-content">
+                        <h3 class="category-title">Qwerty Plain</h3>
+                        <p class="category-description">Standard mechanical keyboard with multilingual support.</p>
+                        <div class="language-badges">
+                            <span class="mini-badge">10 languages</span>
+                            <div class="language-tooltip">
+                                <span>Hindi, Bengali, Tamil, Telugu, Kannada, Malayalam, Marathi, Punjabi, Gujarati,
+                                    Odia</span>
+                            </div>
+                        </div>
+                        <div class="category-price">From ₹6,499</div>
+                        <button class="btn btn-secondary category-button">View Options</button>
+                    </div>
+                </div>
 
-            <div class="complete-product-grid" id="complete-product-catalog">
-                <!-- Products will be dynamically loaded here via JavaScript -->
+                <!-- Category 3: Qwerty 3-in-1 -->
+                <div class="product-category-card">
+                    <div class="category-image">
+                        <img src="./default_image/2in1_with_screen-removebg-preview.png" alt="Qwerty 3-in-1">
+                    </div>
+                    <div class="category-content">
+                        <h3 class="category-title">Qwerty 3-in-1</h3>
+                        <p class="category-description">Multi-device keyboard that works with computer, tablet and
+                            smartphone.</p>
+                        <div class="language-badges">
+                            <span class="mini-badge">10 languages</span>
+                            <div class="language-tooltip">
+                                <span>Hindi, Bengali, Tamil, Telugu, Kannada, Malayalam, Marathi, Punjabi, Gujarati,
+                                    Odia</span>
+                            </div>
+                        </div>
+                        <div class="category-price">From ₹8,999</div>
+                        <button class="btn btn-secondary category-button">View Options</button>
+                    </div>
+                </div>
+
+                <!-- Category 4: Qwerty 3-in-1 with Display -->
+                <div class="product-category-card">
+                    <div class="category-image">
+                        <img src="./default_image/pc.png" alt="Qwerty 3-in-1 with Display">
+                    </div>
+                    <div class="category-content">
+                        <h3 class="category-title">Qwerty 3-in-1 with Display</h3>
+                        <p class="category-description">Multi-device keyboard with integrated display for enhanced
+                            productivity.</p>
+                        <div class="language-badges">
+                            <span class="mini-badge">10 languages</span>
+                            <div class="language-tooltip">
+                                <span>Hindi, Bengali, Tamil, Telugu, Kannada, Malayalam, Marathi, Punjabi, Gujarati,
+                                    Odia</span>
+                            </div>
+                        </div>
+                        <div class="category-price">From ₹14,999</div>
+                        <button class="btn btn-secondary category-button">View Options</button>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
