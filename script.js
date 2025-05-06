@@ -18,8 +18,9 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
 
 // Auth Modal functionality
 const loginBtn = document.getElementById('loginBtn');
@@ -60,11 +61,10 @@ loginForm.addEventListener('submit', async (e) => {
     const password = document.getElementById('loginPassword').value;
 
     try {
-        const userCredential = await auth.signInWithEmailAndPassword(email, password);
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
         console.log('Logged in:', userCredential.user);
         loginModal.style.display = 'none';
         alert('Successfully logged in!');
-        // Add any post-login logic here (e.g., redirect, update UI)
     } catch (error) {
         console.error('Login error:', error);
         alert('Login failed: ' + error.message);
@@ -79,14 +79,13 @@ signupForm.addEventListener('submit', async (e) => {
     const name = document.getElementById('signupName').value;
 
     try {
-        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         await userCredential.user.updateProfile({
             displayName: name
         });
         console.log('Signed up:', userCredential.user);
         signupModal.style.display = 'none';
         alert('Successfully signed up!');
-        // Add any post-signup logic here
     } catch (error) {
         console.error('Signup error:', error);
         alert('Signup failed: ' + error.message);
@@ -94,19 +93,19 @@ signupForm.addEventListener('submit', async (e) => {
 });
 
 // Google Login
-const googleBtn = document.getElementById('google-login-btn');
-googleBtn.addEventListener('click', async () => {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    try {
-        const result = await auth.signInWithPopup(provider);
-        console.log('Google sign in:', result.user);
-        loginModal.style.display = 'none';
-        alert('Successfully logged in with Google!');
-        // Add any post-login logic here
-    } catch (error) {
-        console.error('Google sign in error:', error);
-        alert('Google sign in failed: ' + error.message);
-    }
+document.querySelectorAll('.btn-google').forEach(btn => {
+    btn.addEventListener('click', async () => {
+        try {
+            const result = await signInWithPopup(auth, provider);
+            console.log('Google login:', result.user);
+            loginModal.style.display = 'none';
+            signupModal.style.display = 'none';
+            alert('Successfully logged in with Google!');
+        } catch (error) {
+            console.error('Google login error:', error);
+            alert('Google login failed: ' + error.message);
+        }
+    });
 });
 
 // Auth state observer
@@ -117,7 +116,6 @@ auth.onAuthStateChanged((user) => {
         // Update UI for logged in user
         loginBtn.style.display = 'none';
         signupBtn.style.display = 'none';
-        // Add logout button or user profile info
     } else {
         // User is signed out
         console.log('User is signed out');
@@ -126,7 +124,6 @@ auth.onAuthStateChanged((user) => {
         signupBtn.style.display = 'block';
     }
 });
-
 
 
 // Global variables
