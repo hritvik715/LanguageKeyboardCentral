@@ -1,5 +1,11 @@
 
-//imp-> AUTH
+//imp-> //imp-> google AUTH yha se suru hai (Login and signup)
+//imp-> //imp-> google AUTH yha se suru hai (Login and signup)
+//imp-> //imp-> google AUTH yha se suru hai (Login and signup)
+//imp-> //imp-> google AUTH yha se suru hai (Login and signup)
+
+
+
 // Initialize Google Sign-In
 // Import the functions you need from the SDKs you need
 // Import Firebase
@@ -109,21 +115,48 @@ document.querySelectorAll('.btn-google').forEach(btn => {
 });
 
 // Auth state observer
+// Auth state observer
+// Auth state observer
 auth.onAuthStateChanged((user) => {
+    const authButtons = document.getElementById('auth-buttons');
+    const userInfo = document.getElementById('user-info');
+
+    if (!authButtons || !userInfo) return; // Guard clause if elements don't exist
+
     if (user) {
         // User is signed in
         console.log('User is signed in:', user);
-        // Update UI for logged in user
-        loginBtn.style.display = 'none';
-        signupBtn.style.display = 'none';
+        authButtons.style.display = 'none';
+        userInfo.style.display = 'flex';
+        userInfo.innerHTML = `
+            <span>Welcome, ${user.displayName || user.email}</span>
+            <button id="logoutBtn" class="auth-btn">Logout</button>
+        `;
+
+        // Add logout functionality
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => {
+                auth.signOut().then(() => {
+                    console.log('User signed out');
+                }).catch((error) => {
+                    console.error('Sign out error:', error);
+                });
+            });
+        }
     } else {
         // User is signed out
         console.log('User is signed out');
-        // Update UI for logged out user
-        loginBtn.style.display = 'block';
-        signupBtn.style.display = 'block';
+        authButtons.style.display = 'flex';
+        userInfo.style.display = 'none';
     }
 });
+
+//imp-> google AUTH yha takk hai (Login and signup)
+//imp-> google AUTH yha takk hai (Login and signup)
+//imp-> google AUTH yha takk hai (Login and signup)
+//imp-> google AUTH yha takk hai (Login and signup)
+
 
 
 // Global variables

@@ -4274,3 +4274,100 @@ img {
 .close-button:hover {
     color: #333;
 }
+
+
+/* Add this to your styles.css */
+.auth-buttons {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 100;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.auth-buttons.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+    margin-left: 20px;
+}
+
+.auth-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.auth-btn:first-child {
+    background-color: transparent;
+    color: #6a4bc3;
+    border: 2px solid #6a4bc3;
+}
+
+.auth-btn:last-child {
+    background-color: #6a4bc3;
+    color: white;
+}
+
+.auth-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(106, 75, 195, 0.2);
+}
+
+.user-info {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    margin-left: 20px;
+}
+
+.user-info span {
+    color: #333;
+    font-weight: 500;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+    margin-left: auto;
+    margin-right: 20px;
+}
+
+.auth-buttons .auth-btn {
+    opacity: 1;
+    visibility: visible;
+    transition: all 0.3s ease;
+}
+
+.user-info {
+    margin-left: auto;
+    margin-right: 20px;
+    display: none;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-info span {
+    color: #333;
+    font-weight: 500;
+}
+
+.user-info .auth-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+}
+
+.user-info .auth-btn:hover {
+    background-color: #c82333;
+}
