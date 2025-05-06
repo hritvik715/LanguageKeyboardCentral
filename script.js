@@ -1,3 +1,112 @@
+
+//imp-> AUTH
+// Initialize Google Sign-In
+// Import the functions you need from the SDKs you need
+// Import Firebase
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
+
+// Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyAX6CSLlcO66u7_9lZ9IV9K_dP8ENYETB0",
+    authDomain: "login-83285.firebaseapp.com",
+    projectId: "login-83285",
+    storageBucket: "login-83285.firebasestorage.app",
+    messagingSenderId: "274437196531",
+    appId: "1:274437196531:web:7e510e520f417bd51cc586"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+// Get DOM elements
+const loginBtn = document.getElementById('loginBtn');
+const signupBtn = document.getElementById('signupBtn');
+const loginModal = document.getElementById('loginModal');
+const signupModal = document.getElementById('signupModal');
+const closeButtons = document.querySelectorAll('.close-button');
+const loginForm = document.getElementById('loginForm');
+const signupForm = document.getElementById('signupForm');
+const googleLoginBtns = document.querySelectorAll('.btn-google');
+
+// Show/Hide Modals
+loginBtn.addEventListener('click', () => {
+    loginModal.style.display = 'flex';
+});
+
+signupBtn.addEventListener('click', () => {
+    signupModal.style.display = 'flex';
+});
+
+// Close modal functionality
+closeButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        loginModal.style.display = 'none';
+        signupModal.style.display = 'none';
+    });
+});
+
+// Close on outside click
+window.addEventListener('click', (e) => {
+    if (e.target === loginModal) loginModal.style.display = 'none';
+    if (e.target === signupModal) signupModal.style.display = 'none';
+});
+
+// Email/Password Login
+loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+
+    try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        console.log('Logged in user:', userCredential.user);
+        loginModal.style.display = 'none';
+        alert('Successfully logged in!');
+    } catch (error) {
+        console.error('Login error:', error);
+        alert('Login failed: ' + error.message);
+    }
+});
+
+// Email/Password Sign Up
+signupForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('signupEmail').value;
+    const password = document.getElementById('signupPassword').value;
+
+    try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        console.log('New user:', userCredential.user);
+        signupModal.style.display = 'none';
+        alert('Successfully signed up!');
+    } catch (error) {
+        console.error('Signup error:', error);
+        alert('Signup failed: ' + error.message);
+    }
+});
+
+// Google Login
+googleLoginBtns.forEach(button => {
+    button.addEventListener('click', async () => {
+        try {
+            const result = await signInWithPopup(auth, provider);
+            console.log('Google login successful:', result.user);
+            loginModal.style.display = 'none';
+            signupModal.style.display = 'none';
+            alert('Successfully logged in with Google!');
+        } catch (error) {
+            console.error('Google login error:', error);
+            alert('Google login failed: ' + error.message);
+        }
+    });
+});
+
+
+
+
 // Global variables
 let products = [];
 let languages = [];
@@ -759,3 +868,68 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 });
+
+
+
+
+
+// login
+// Auth Modal functionality
+const loginBtn = document.getElementById('loginBtn');
+const signupBtn = document.getElementById('signupBtn');
+const loginModal = document.getElementById('loginModal');
+const signupModal = document.getElementById('signupModal');
+const closeButtons = document.querySelectorAll('.close-button');
+const loginForm = document.getElementById('loginForm');
+const signupForm = document.getElementById('signupForm');
+
+// Open modals
+loginBtn.addEventListener('click', () => {
+    loginModal.style.display = 'flex';
+});
+
+signupBtn.addEventListener('click', () => {
+    signupModal.style.display = 'flex';
+});
+
+// Close modals
+closeButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        loginModal.style.display = 'none';
+        signupModal.style.display = 'none';
+    });
+});
+
+// Close on outside click
+window.addEventListener('click', (e) => {
+    if (e.target === loginModal) loginModal.style.display = 'none';
+    if (e.target === signupModal) signupModal.style.display = 'none';
+});
+
+// Form submissions
+loginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    // Add your login logic here
+    console.log('Login:', { email, password });
+});
+
+signupForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('signupName').value;
+    const email = document.getElementById('signupEmail').value;
+    const password = document.getElementById('signupPassword').value;
+    // Add your signup logic here
+    console.log('Signup:', { name, email, password });
+});
+
+// Google login
+document.querySelectorAll('.btn-google').forEach(button => {
+    button.addEventListener('click', () => {
+        // Add your Google login logic here
+        console.log('Google login clicked');
+    });
+});
+
+
