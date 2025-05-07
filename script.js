@@ -23,19 +23,19 @@ const firebaseConfig = {
     appId: "1:274437196531:web:7e510e520f417bd51cc586"
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const provider = new GoogleAuthProvider();
+// Initialize Firebase (compat version)
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const provider = new firebase.auth.GoogleAuthProvider();
 
-// Auth Modal functionality
+// Get DOM elements
 const loginBtn = document.getElementById('loginBtn');
 const signupBtn = document.getElementById('signupBtn');
 const loginModal = document.getElementById('loginModal');
 const signupModal = document.getElementById('signupModal');
-const closeButtons = document.querySelectorAll('.close-button');
 const loginForm = document.getElementById('loginForm');
 const signupForm = document.getElementById('signupForm');
+const closeButtons = document.querySelectorAll('.close-button');
 
 // Show/Hide Modals
 loginBtn.addEventListener('click', () => {
@@ -60,23 +60,6 @@ window.addEventListener('click', (e) => {
     if (e.target === signupModal) signupModal.style.display = 'none';
 });
 
-// Email/Password Login
-loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const email = document.getElementById('loginEmail').value;
-    const password = document.getElementById('loginPassword').value;
-
-    try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        console.log('Logged in:', userCredential.user);
-        loginModal.style.display = 'none';
-        alert('Successfully logged in!');
-    } catch (error) {
-        console.error('Login error:', error);
-        alert('Login failed: ' + error.message);
-    }
-});
-
 // Email/Password Sign Up
 signupForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -85,7 +68,7 @@ signupForm.addEventListener('submit', async (e) => {
     const name = document.getElementById('signupName').value;
 
     try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
         await userCredential.user.updateProfile({
             displayName: name
         });
@@ -98,11 +81,28 @@ signupForm.addEventListener('submit', async (e) => {
     }
 });
 
+// Email/Password Login
+loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+
+    try {
+        const userCredential = await auth.signInWithEmailAndPassword(email, password);
+        console.log('Logged in:', userCredential.user);
+        loginModal.style.display = 'none';
+        alert('Successfully logged in!');
+    } catch (error) {
+        console.error('Login error:', error);
+        alert('Login failed: ' + error.message);
+    }
+});
+
 // Google Login
 document.querySelectorAll('.btn-google').forEach(btn => {
     btn.addEventListener('click', async () => {
         try {
-            const result = await signInWithPopup(auth, provider);
+            const result = await auth.signInWithPopup(provider);
             console.log('Google login:', result.user);
             loginModal.style.display = 'none';
             signupModal.style.display = 'none';
@@ -115,13 +115,9 @@ document.querySelectorAll('.btn-google').forEach(btn => {
 });
 
 // Auth state observer
-// Auth state observer
-// Auth state observer
 auth.onAuthStateChanged((user) => {
     const authButtons = document.getElementById('auth-buttons');
     const userInfo = document.getElementById('user-info');
-
-    if (!authButtons || !userInfo) return; // Guard clause if elements don't exist
 
     if (user) {
         // User is signed in
@@ -134,16 +130,9 @@ auth.onAuthStateChanged((user) => {
         `;
 
         // Add logout functionality
-        const logoutBtn = document.getElementById('logoutBtn');
-        if (logoutBtn) {
-            logoutBtn.addEventListener('click', () => {
-                auth.signOut().then(() => {
-                    console.log('User signed out');
-                }).catch((error) => {
-                    console.error('Sign out error:', error);
-                });
-            });
-        }
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            auth.signOut();
+        });
     } else {
         // User is signed out
         console.log('User is signed out');
